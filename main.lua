@@ -10,7 +10,7 @@ if G.platform == "android" then
 end
 
 -- Load Saved Data into Globals
-
+--print ("main")
 -- Initialize Ads/In App Purchases
 
 -- System Events

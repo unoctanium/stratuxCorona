@@ -19,8 +19,8 @@ function scene:show(event)
   elseif (phase == "did") then
     -- TODO: temporarily shortened for development
     -- TODO: temporarily pointed at game scene instead
-    timer.performWithDelay(0, function()
-    	composer.gotoScene("scripts.scenes.game") -- goto menu scene after 3s
+    timer.performWithDelay(10, function()
+    	composer.gotoScene("scripts.scenes.ahrs") -- goto menu scene after 3s
     end)
   end
 end

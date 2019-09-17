@@ -54,4 +54,5 @@ G.data.highscore = 0
 G.sounds = {} -- not unloaded at scene exit
 -- G.sounds.sfx1 = audio.loadSound("sounds/sfx1.wav")
 
+
 return G

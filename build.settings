@@ -11,6 +11,10 @@ settings = {
   android = {
     usesPermissions = {
       "android.permission.INTERNET",
+      -- Permission to retrieve current location from the GPS
+      "android.permission.ACCESS_FINE_LOCATION",
+      -- Permission to retrieve current location from WiFi or cellular service
+      "android.permission.ACCESS_COARSE_LOCATION",
     },
   },
   iphone = {
@@ -30,6 +34,16 @@ settings = {
       },
     },
   },
-  plugins = {
+  plugins =
+  {
+    ["plugin.websockets"] = {
+      publisherId = "com.develephant"
+    },
+    ["plugin.openssl"] = {
+      publisherId = "com.coronalabs",
+    },
+    ["plugin.bit"] = {
+      publisherId = "com.coronalabs",
+    }
   },
 }

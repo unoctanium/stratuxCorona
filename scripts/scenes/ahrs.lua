@@ -2,7 +2,9 @@
 -- Setup dependencies, vars, constants, etc
 local composer = require("composer")
 local uiElements = require("scripts.modules.uiElements")
-local deviceSensorsAPI = require("scripts.modules.deviceSensorsAPI")
+
+--@@ODO Select here
+--local deviceSensorsAPI = require("scripts.modules.deviceSensorsAPI")
 --local stratuxAPI = require("scripts.modules.stratuxAPI")
 
 local attitude = require("scripts.modules.attitude")
@@ -22,9 +24,9 @@ end
 
 local function onTestAHRS(event)
   if event.phase == "moved" then
-    local roll = (event.y - event.yStart) * 90 / (display.contentWidth/2)
-    local pitch = (event.x - event.xStart) * 90 / (display.contentHeight/2)
-    attitude:update(-pitch, roll)
+    local roll = -(event.x - event.xStart) * 90 / (display.contentWidth/2)
+    local pitch = (event.y - event.yStart) * 90 / (display.contentHeight/2) 
+    attitude:update(roll, -pitch, 0)
   elseif event.phase == "ended" then
     attitude:update(0,0)
   end
@@ -51,7 +53,9 @@ function scene:create(event)
   -- load scene specific audio
   -- touch handlers
   -- create modules
-  deviceSensorsAPI:create()
+
+  --@@ODO Select here
+  --deviceSensorsAPI:create()
   --stratuxAPI:create()
 end
 
@@ -97,8 +101,10 @@ function scene:destroy(event)
   local sceneGroup = self.view
   -- destroy scene specific audio
   -- destroy modules
+
+  --@@ODO Select here
   --stratuxAPI:destroy()
-  deviceSensorsAPI:destroy()
+  --deviceSensorsAPI:destroy()
 end
 
 
@@ -128,7 +134,7 @@ scene:addEventListener("destroy", scene)
 
 -- Add ahrs update listeners
 Runtime:addEventListener( "ahrsAttitudeDevice", onUpdateAttitude )
---Runtime:addEventListener( "ahrsAttitudeStratux", onUpdateAttitude )
+Runtime:addEventListener( "ahrsAttitudeStratux", onUpdateAttitude )
 
 
 -- Add test touch listener

@@ -4,10 +4,10 @@ local G = require("scripts.modules.g")
 math.randomseed(os.time()) -- Seed random
 
 -- Hide UI
-display.setStatusBar(display.HiddenStatusBar)
-if G.platform == "android" then
-  native.setProperty("androidSystemUiVisibility", "immersiveSticky")
-end
+-- display.setStatusBar(display.HiddenStatusBar)
+-- if G.platform == "android" then
+--   native.setProperty("androidSystemUiVisibility", "immersiveSticky")
+-- end
 
 -- Load Saved Data into Globals
 --print ("main")

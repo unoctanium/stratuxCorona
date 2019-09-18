@@ -67,7 +67,7 @@ function scene:show(event)
   if (phase == "will") then
     -- position elements
 
-    attitude:create(display.contentCenterX, display.contentCenterX)
+    attitude:create(display.contentCenterX, 340, 800, 800)
     --attitude:debugUpdate(0, 0, 0)
     uiElements:create(display.contentCenterX, 100)
 

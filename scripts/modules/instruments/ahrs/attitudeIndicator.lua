@@ -11,6 +11,8 @@ local contentGroup
 local clippingGroup
 local pitchContentGroup
 local pitchClippingGroup
+local rollIndicatorContentGroup
+local rollIndicatorClippingGroup
 
 -- parameters
 M.skyRectColor = {0/255, 150/255, 201/255, 1}
@@ -167,10 +169,33 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height, _pitchClipX, 
     referenceLineCircle:setFillColor(0,0,0,0)
     referenceLineCircle.strokeWidth = referenceLineStrokeWidth
 
+    -- Roll Indicator
+    local rollIndicatorMarkerStrokeWidth = 3
+    local rollIndicatorClippingGroupWidth = width/9*5
+    local rollIndicatorClippingGroupHeight = height/9*2
+    rollIndicatorClippingGroup = display.newContainer(displayGroup,rollIndicatorClippingGroupWidth,rollIndicatorClippingGroupHeight)
+    rollIndicatorClippingGroup.x = x
+    rollIndicatorClippingGroup.y = y-height/2+height/9*1
+    rollIndicatorContentGroup = display.newGroup()
+    rollIndicatorClippingGroup:insert(rollIndicatorContentGroup)
+    -- arc
+    local rollindicatorArcRadius = height/2*0.95
+    local rollIndicatorArc = display.newCircle(rollIndicatorContentGroup, 0, 0, rollindicatorArcRadius)
+    rollIndicatorArc:setStrokeColor(1,1,1,1)
+    rollIndicatorArc:setFillColor(0,0,0,0)
+    rollIndicatorArc.strokeWidth = 1
+    -- scale
+    local rollIndicatorSampleMarker = display.newLine(rollIndicatorContentGroup, 0, -rollindicatorArcRadius, 0, -rollindicatorArcRadius + height/9*0.5)
+    rollIndicatorSampleMarker:setStrokeColor(1,1,1)
+    rollIndicatorSampleMarker.strokeWidth = 7
+    -- correction
+    rollIndicatorContentGroup:translate(0,height/2-height/9*1)
+
+
     -- Roll marker
     local rollMarkerWidth = _pitchLadderWidth / 9
     local rollMarkerVertices = { 0,0, -rollMarkerWidth/2,rollMarkerWidth, rollMarkerWidth/2,rollMarkerWidth }
-    local rollMarker = display.newPolygon(displayGroup, x, y-height/2/9*6, rollMarkerVertices)
+    local rollMarker = display.newPolygon(displayGroup, x, y-height/2/9*7, rollMarkerVertices)
     rollMarker:setFillColor(1,1,1,1)
     rollMarker.strokeWidth = 0
 
@@ -200,6 +225,9 @@ M.update = function (self, roll, pitch)
     pitchContentGroup.y = y - pitchClipY
     pitchContentGroup.rotation = -roll
     pitchContentGroup:translate(traX, traY)
+    -- rotate roll-indicator
+    -- rotate roll indicator
+    rollIndicatorContentGroup.rotation = -roll
 end
 
 
@@ -217,8 +245,13 @@ end
 M.destroy = function ()
     clippingGroup:removeSelf() 
     clippingGroup = nil
+    contentGroup = nil
     pitchClippingGroup:removeSelf()
     pitchClippingGroup = nil
+    pitchContentGroup = nil
+    rollIndicatorClippingGroup:removeSelf()
+    rollIndicatorClippingGroup = nil
+    rollIndicatorContentGroup = nil
 
     -- remove Debug Touch Handler
     if M.debugTouch then

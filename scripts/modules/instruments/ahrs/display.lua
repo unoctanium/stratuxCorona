@@ -6,15 +6,14 @@ local x, y, width, height
 --local centerX, centerY
 
 -- display Modules
-local pitchBox = require("scripts.modules.instruments.ahrs.pitchBox")
-local rollBox = require("scripts.modules.instruments.ahrs.rollBox")
---local slipskidIndicator = require("scripts.modules.instruments.ahrs.slipskidIndicator")
-local selectedSpeedField = require("scripts.modules.instruments.ahrs.selectSpeedField")
-local selectedAltitudeField = require("scripts.modules.instruments.ahrs.selectAltitudeField")
-local selectedMinimumsField = require("scripts.modules.instruments.ahrs.selectedMinimumsField")
+local attitudeIndicator = require("scripts.modules.instruments.ahrs.attitudeIndicator")
+local slipskidIndicator = require("scripts.modules.instruments.ahrs.slipskidIndicator")
 local airspeedTape = require("scripts.modules.instruments.ahrs.airspeedTape")
 local altitudeTape = require("scripts.modules.instruments.ahrs.altitudeTape")
-local baroSettingsField= require("scripts.modules.instruments.ahrs.baroSettingsField")
+local selectedSpeedField = require("scripts.modules.instruments.ahrs.selectSpeedField")
+local selectedAltitudeField = require("scripts.modules.instruments.ahrs.selectAltitudeField")
+local selectedMinAltitudeField = require("scripts.modules.instruments.ahrs.selectMinAltitudeField")
+local selectedMinSpeedField= require("scripts.modules.instruments.ahrs.selectMinSpeedField")
 local hudOverlay = require("scripts.modules.instruments.ahrs.hudOverlay")
 
 
@@ -24,11 +23,8 @@ local hudOverlay = require("scripts.modules.instruments.ahrs.hudOverlay")
 -- Event handlers
 --
 local function onAhrsRollPitchEvent( event )
-    pitchBox:update(event.roll, event.pitch)
+    attitudeIndicator:update(event.roll, event.pitch)
 end
-
-
-
 
 --
 -- called by parent upon scene creation
@@ -51,35 +47,33 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height)
     Runtime:addEventListener("ahrsRollPitch", onAhrsRollPitchEvent)
 
     -- create displayModules from back to front
-    pitchBox:create(displayGroup, x, y, width, height, x, y+height/18, width*5/9, height*6/9, height*5/9) 
+    attitudeIndicator:create(displayGroup, x, y, width, height, x, y+height/18, width*5/9, height*6/9, height*5/9) 
     airspeedTape:create(displayGroup, x-width/2+width/9*1, y, width/9*2, height/9*7)
     altitudeTape:create(displayGroup, x+width/2-width/9*1, y, width/9*2, height/9*7)
+    slipskidIndicator:create(displayGroup, x, y+height/2-height/9*0.5, width/9*3.75, height/9*1) 
     selectedSpeedField:create(displayGroup, x-width/2+width/9*1, y-height/2+height/9*0.5, width/9*2, height/9*1)
     selectedAltitudeField:create(displayGroup, x+width/2-width/9*1, y-height/2+height/9*0.5, width/9*2, height/9*1)
-    selectedMinimumsField:create(displayGroup, x-width/2+width/9*1, y+height/2-height/9*0.5, width/9*2, height/9*1)
-    baroSettingsField:create(displayGroup, x+width/2-width/9*1, y+height/2-height/9*0.5, width/9*2, height/9*1)
+    selectedMinAltitudeField:create(displayGroup, x-width/2+width/9*1, y+height/2-height/9*0.5, width/9*2, height/9*1)
+    selectedMinSpeedField:create(displayGroup, x+width/2-width/9*1, y+height/2-height/9*0.5, width/9*2, height/9*1)
     
     -- top layer:
     hudOverlay:create(displayGroup, x, y, width, height)
-    
 
 end
-
 
 --
 -- Called by parent upon destroy
 --
 M.destroy = function()
     hudOverlay:destroy()
-    selectedMinimumsField:destroy()
-    baroSettingsField:destroy()
+    selectedMinSpeedFields:destroy()
+    selectedMinAltitudeField:destroy()
     selectedSpeedField:destroy()
     selectedAltitudeField:destroy()
+    slipskidIndicator:destroy()
     airspeedTape:destroy()
     altitudeTape:destroy()
-    pitchBox:destroy()
+    attitudeIndicator:destroy()
 end
-
-
 
 return M

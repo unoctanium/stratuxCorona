@@ -20,7 +20,9 @@ function scene:show(event)
     -- TODO: temporarily shortened for development
     -- TODO: temporarily pointed at game scene instead
     timer.performWithDelay(10, function()
-    	composer.gotoScene("scripts.scenes.ahrs") -- goto menu scene after 3s
+    	--composer.gotoScene("scripts.scenes.ahrs") -- goto menu scene after 3s
+      composer.gotoScene("scripts.scenes.instrumentFrame") -- goto menu scene after 3s
+    
     end)
   end
 end

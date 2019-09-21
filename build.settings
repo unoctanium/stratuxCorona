@@ -2,7 +2,7 @@ settings = {
   orientation = {
     -- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
     default = "portrait",
-    supported = { "portrait", },
+    supported = { "portrait", "portraitUpsideDown" },
   },
   excludeFiles = {
     ios = { "Icon.png", "Icon-*dpi.png", },

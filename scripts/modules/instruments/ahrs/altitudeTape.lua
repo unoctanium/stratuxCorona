@@ -17,7 +17,7 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height)
 
     -- paint test box
     local box = display.newRect(displayGroup, x, y, width, height)
-    box:setFillColor(0,0,0,0.4)
+    box:setFillColor(0,0,0,0.3)
     box:setStrokeColor(0,0,0,0)
     box.strokeWidth = 0
 

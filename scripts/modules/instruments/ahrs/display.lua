@@ -8,15 +8,12 @@ local x, y, width, height
 -- display Modules
 local pitchBox = require("scripts.modules.instruments.ahrs.pitchBox")
 local rollBox = require("scripts.modules.instruments.ahrs.rollBox")
-local slipskidIndicator
+--local slipskidIndicator = require("scripts.modules.instruments.ahrs.slipskidIndicator")
 local selectedSpeedField = require("scripts.modules.instruments.ahrs.selectSpeedField")
 local selectedAltitudeField = require("scripts.modules.instruments.ahrs.selectAltitudeField")
-local selectedMinimumsField
-local speedAlert
-local altitudeAlert
+local selectedMinimumsField = require("scripts.modules.instruments.ahrs.selectedMinimumsField")
 local airspeedTape = require("scripts.modules.instruments.ahrs.airspeedTape")
 local altitudeTape = require("scripts.modules.instruments.ahrs.altitudeTape")
-local gsIndicator= require("scripts.modules.instruments.ahrs.gsIndicator")
 local baroSettingsField= require("scripts.modules.instruments.ahrs.baroSettingsField")
 local hudOverlay = require("scripts.modules.instruments.ahrs.hudOverlay")
 
@@ -59,7 +56,7 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height)
     altitudeTape:create(displayGroup, x+width/2-width/9*1, y, width/9*2, height/9*7)
     selectedSpeedField:create(displayGroup, x-width/2+width/9*1, y-height/2+height/9*0.5, width/9*2, height/9*1)
     selectedAltitudeField:create(displayGroup, x+width/2-width/9*1, y-height/2+height/9*0.5, width/9*2, height/9*1)
-    gsIndicator:create(displayGroup, x-width/2+width/9*1, y+height/2-height/9*0.5, width/9*2, height/9*1)
+    selectedMinimumsField:create(displayGroup, x-width/2+width/9*1, y+height/2-height/9*0.5, width/9*2, height/9*1)
     baroSettingsField:create(displayGroup, x+width/2-width/9*1, y+height/2-height/9*0.5, width/9*2, height/9*1)
     
     -- top layer:
@@ -74,7 +71,7 @@ end
 --
 M.destroy = function()
     hudOverlay:destroy()
-    gsIndicator:destroy()
+    selectedMinimumsField:destroy()
     baroSettingsField:destroy()
     selectedSpeedField:destroy()
     selectedAltitudeField:destroy()

@@ -170,7 +170,6 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height, _pitchClipX, 
     referenceLineCircle.strokeWidth = referenceLineStrokeWidth
 
     -- Roll Indicator
-    local rollIndicatorMarkerStrokeWidth = 3
     local rollIndicatorClippingGroupWidth = width/9*5
     local rollIndicatorClippingGroupHeight = height/9*2
     rollIndicatorClippingGroup = display.newContainer(displayGroup,rollIndicatorClippingGroupWidth,rollIndicatorClippingGroupHeight)
@@ -181,13 +180,69 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height, _pitchClipX, 
     -- arc
     local rollindicatorArcRadius = height/2*0.95
     local rollIndicatorArc = display.newCircle(rollIndicatorContentGroup, 0, 0, rollindicatorArcRadius)
-    rollIndicatorArc:setStrokeColor(1,1,1,1)
+    rollIndicatorArc:setStrokeColor(0,0,0,0)
     rollIndicatorArc:setFillColor(0,0,0,0)
-    rollIndicatorArc.strokeWidth = 1
+    rollIndicatorArc.strokeWidth = 0
     -- scale
-    local rollIndicatorSampleMarker = display.newLine(rollIndicatorContentGroup, 0, -rollindicatorArcRadius, 0, -rollindicatorArcRadius + height/9*0.5)
-    rollIndicatorSampleMarker:setStrokeColor(1,1,1)
-    rollIndicatorSampleMarker.strokeWidth = 7
+    local rollIndicatorMarkerStrokeWidth1 = 7
+    local rollIndicatorMarkerStrokeWidth2 = 3
+    local rollIndicatorMarkerStrokeWidth3 = 7
+    local rollIndicatorMarkerLength = height/9 * 0.5 
+    --
+    local values = {10,20,30,45,60,90}
+    for k,v in pairs(values) do
+        local r = rollindicatorArcRadius 
+        local d = rollIndicatorMarkerLength
+        if v==10 or v==20 then d = rollIndicatorMarkerLength/2
+        elseif v==45 then d=rollIndicatorMarkerLength/3
+        end
+        local x1, y1 = r * math.cos((90-v) * deg2Rad), r * math.sin((90-v) * deg2Rad)
+        local x2, y2 = (r-d) * math.cos((90-v) * deg2Rad), (r-d) * math.sin((90-v) * deg2Rad)
+        local l1 = display.newLine(rollIndicatorContentGroup, x1, -y1, x2, -y2)
+        local l2 = display.newLine(rollIndicatorContentGroup, -x1, -y1, -x2, -y2)
+        local l3
+        if v ~= 90 then l3 = display.newLine(rollIndicatorContentGroup, x1, y1, x2, y2) end
+        local l4
+        if v ~= 90 then l4 = display.newLine(rollIndicatorContentGroup, -x1, y1, -x2, y2) end
+        l1:setStrokeColor(1,1,1)
+        l2:setStrokeColor(1,1,1)
+        l1.strokeWidth = rollIndicatorMarkerStrokeWidth1
+        l2.strokeWidth = rollIndicatorMarkerStrokeWidth1
+        if v ~= 90 then 
+            l3:setStrokeColor(1,0,0)
+            l4:setStrokeColor(1,0,0)
+            l3.strokeWidth = rollIndicatorMarkerStrokeWidth1 
+            l4.strokeWidth = rollIndicatorMarkerStrokeWidth1 
+        end
+        if v==10 or v==20 then 
+            l1.strokeWidth = rollIndicatorMarkerStrokeWidth2
+            l2.strokeWidth = rollIndicatorMarkerStrokeWidth2
+            if v ~= 90 then
+                l3.strokeWidth = rollIndicatorMarkerStrokeWidth2
+                l4.strokeWidth = rollIndicatorMarkerStrokeWidth2
+            end
+        elseif v==45 then 
+            l1.strokeWidth = rollIndicatorMarkerStrokeWidth3
+            l2.strokeWidth = rollIndicatorMarkerStrokeWidth3
+            if v ~= 90 then
+                l3.strokeWidth = rollIndicatorMarkerStrokeWidth3
+                l4.strokeWidth = rollIndicatorMarkerStrokeWidth3  
+            end
+        end   
+    end -- of {10,20,30,45,60,90}
+    -- zero scale indicator
+    local rollMarkerZeroWidth = _pitchLadderWidth / 12
+    local rollMarkerZeroVertices = { 0,0, -rollMarkerZeroWidth/2,-rollMarkerZeroWidth, rollMarkerZeroWidth/2,-rollMarkerZeroWidth }
+    local rollMarkerZero = display.newPolygon(rollIndicatorContentGroup, 0, -rollindicatorArcRadius+rollMarkerZeroWidth/2, rollMarkerZeroVertices)
+    rollMarkerZero:setFillColor(1,1,1,1)
+    rollMarkerZero.strokeWidth = 0
+    -- negative zero scale indicator
+    local rollMarker2ZeroWidth = _pitchLadderWidth / 12
+    local rollMarker2ZeroVertices = { 0,0, -rollMarker2ZeroWidth/2,rollMarker2ZeroWidth, rollMarker2ZeroWidth/2,rollMarker2ZeroWidth }
+    local rollMarker2Zero = display.newPolygon(rollIndicatorContentGroup, 0, rollindicatorArcRadius-rollMarkerZeroWidth/2, rollMarker2ZeroVertices)
+    rollMarker2Zero:setFillColor(1,0,0)
+    rollMarker2Zero.strokeWidth = 0
+    
     -- correction
     rollIndicatorContentGroup:translate(0,height/2-height/9*1)
 

@@ -163,20 +163,20 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height, _pitchClipX, 
     rollIndicatorArc:setFillColor(0,0,0,0)
     rollIndicatorArc.strokeWidth = 0
     -- scale
-    local rollIndicatorMarkerStrokeWidth1 = 7
+    local rollIndicatorMarkerStrokeWidth1 = 5
     local rollIndicatorMarkerStrokeWidth2 = 3
-    local rollIndicatorMarkerStrokeWidth3 = 7
+    local rollIndicatorMarkerStrokeWidth3 = 5
     local rollIndicatorMarkerLength = height/9 * 0.5 
     --
     local values = {10,20,30,45,60,90}
     for k,v in pairs(values) do
-        local r = rollindicatorArcRadius 
         local d = rollIndicatorMarkerLength
+        local r = rollindicatorArcRadius - d
         if v==10 or v==20 then d = rollIndicatorMarkerLength/2
         elseif v==45 then d=rollIndicatorMarkerLength/3
         end
         local x1, y1 = r * math.cos((90-v) * deg2Rad), r * math.sin((90-v) * deg2Rad)
-        local x2, y2 = (r-d) * math.cos((90-v) * deg2Rad), (r-d) * math.sin((90-v) * deg2Rad)
+        local x2, y2 = (r+d) * math.cos((90-v) * deg2Rad), (r+d) * math.sin((90-v) * deg2Rad)
         local l1 = display.newLine(rollIndicatorContentGroup, x1, -y1, x2, -y2)
         local l2 = display.newLine(rollIndicatorContentGroup, -x1, -y1, -x2, -y2)
         local l3

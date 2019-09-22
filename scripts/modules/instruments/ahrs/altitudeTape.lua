@@ -6,9 +6,9 @@ local x, y, width, height
 
 local contentGroup
 local clippingGroup
-
+local lineSpacing = 0
+local currentAltitudeLabel = nil
 -- public parameters
-M.lineSpacing = 0
 
 --local privateFunction = function() end
 
@@ -39,7 +39,7 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height)
 
     -- set Parameters
     local lineLength = width / 4
-    M.lineSpacing = height / 4
+    lineSpacing = height / 4
     local lineStrokeWidth = 2
     local labelSize = width / 4
     local labelFont = native.systemFont
@@ -47,20 +47,41 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height)
     -- draw inicator lines and labels
     for i = -300, 2 do
         -- line
-        local line = display.newLine(contentGroup, -width/4, i * M.lineSpacing, -width/2, i * M.lineSpacing )
+        local line = display.newLine(contentGroup, -width/4, i * lineSpacing, -width/2, i * lineSpacing )
         line:setStrokeColor(1, 1, 1, 1)
         line.strokeWidth = lineStrokeWidth
         for k = 1,4 do
-            local l2 = display.newLine(contentGroup, -width*3/8, i * M.lineSpacing - k*(M.lineSpacing/4), -width/2, i * M.lineSpacing - k*(M.lineSpacing/4))
+            local l2 = display.newLine(contentGroup, -width*3/8, i * lineSpacing - k*(lineSpacing/4), -width/2, i * lineSpacing - k*(lineSpacing/4))
             l2:setStrokeColor(1, 1, 1, 1)
             l2.strokeWidth = lineStrokeWidth    
         end
         -- label
-        local label = display.newText( contentGroup, string.format( "%d", -i*100 ), -width*7/32, i * M.lineSpacing, labelFont, labelSize ) 
+        local label = display.newText( contentGroup, string.format( "%d", -i*100 ), -width*7/32, i * lineSpacing, labelFont, labelSize ) 
         label:setFillColor(1,1,1.1)
         label.anchorX = 0
         label.anchorY = 0.5
     end
+
+    -- draw current Altitude field
+    -- black box
+    local lineHeight = height/10
+    local box = display.newRect(displayGroup, x+width/8*1, y, width/8*6, lineHeight)
+    box:setFillColor(0,0,0,1)
+    box:setStrokeColor(0,0,0,0)
+    box.strokeWidth = 0
+    -- altitude Marker
+    local altitudeMarkerVertices = { 0,0, 0,lineHeight, -lineHeight/2,lineHeight/2 }
+    local altitudeMarker = display.newPolygon(displayGroup, x-width/32*8, y, altitudeMarkerVertices)
+    altitudeMarker.anchorX=1
+    altitudeMarker:setFillColor(0,0,0,1)
+    altitudeMarker.strokeWidth = 0
+    -- Label
+    local currentAltitudeLabelFont = native.systemFont
+    local currentAltitudeLabelSize = width/16*5
+    currentAltitudeLabel = display.newText( displayGroup, string.format( "%d", 9999 ), x-width/16*5, y, currentAltitudeLabelFont, currentAltitudeLabelSize ) 
+    currentAltitudeLabel:setFillColor(1, 1, 1, 1)
+    currentAltitudeLabel.anchorX = 0
+    currentAltitudeLabel.anchorY = 0.5
 
 end
 
@@ -73,7 +94,8 @@ M.update = function (self, altitude)
     -- move tape
     contentGroup.x = 0
     contentGroup.y = 0
-    contentGroup.y = (altitude/100) * M.lineSpacing
+    contentGroup.y = (altitude/100) * lineSpacing
+    currentAltitudeLabel.text = string.format( "%d", math.floor((altitude+5)/10)*10 )
 end
 
 

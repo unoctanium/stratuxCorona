@@ -19,31 +19,10 @@ M.skyRectColor = {0/255, 150/255, 201/255, 1}
 M.groundRectColor = {151/255, 99/255, 0/255, 1}
 M.horizonLineStrokeWidth = 3
 M.pitchFOV = 45 -- Field ov view (pitch / hight) in deg
-M.debugTouch = true
 
 -- Helper
 local rad2Deg = 57.295779513082
 local deg2Rad = 0.017453292519943
-
--- Event Handler
-local function onDebugTouch(event)
-    if event.x > pitchClipX+pitchClipH/2 or event.x < pitchClipX-pitchClipH/2 then
-        return
-    end
-    local roll, pitch = 0, 0
-    if event.phase == "moved" then
-        roll = (event.x - event.xStart) * 90 / (width/2)
-        pitch = -(event.y - event.yStart) * 90 / (height/2)
-    elseif event.phase == "ended" then
-        roll, pitch = 0 , 0
-    end
-    local ahrsRollPitchEvent = { 
-        name="ahrsRollPitch", 
-        roll=roll, 
-        pitch=pitch
-    }
-    Runtime:dispatchEvent( ahrsRollPitchEvent )  
-end
 
 
 --
@@ -254,12 +233,6 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height, _pitchClipX, 
     rollMarker:setFillColor(1,1,1,1)
     rollMarker.strokeWidth = 0
 
-    -- Add Debug Touch Handler
-    if M.debugTouch then
-        clippingGroup:addEventListener( "touch", onDebugTouch )
-    end
-
-
 end
 
 
@@ -307,12 +280,6 @@ M.destroy = function ()
     rollIndicatorClippingGroup:removeSelf()
     rollIndicatorClippingGroup = nil
     rollIndicatorContentGroup = nil
-
-    -- remove Debug Touch Handler
-    if M.debugTouch then
-        clippingGroup:removeEventListener( "touch", onDebugTouch )
-    end
-
 end
 
 return M

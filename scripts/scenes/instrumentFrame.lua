@@ -1,10 +1,14 @@
 local composer = require("composer")
 local scene = composer.newScene()
 
+
 local ahrs = require("scripts.modules.instruments.ahrs.display")
 local hsi = require("scripts.modules.instruments.hsi.display")
 
 local M={}
+
+local debugTouch = require("scripts.modules.instruments.debugTouch")
+M.debugTouch = true
 
 --
 -- Calculate all Metrics
@@ -50,6 +54,11 @@ function scene:create(event)
   -- define groups
   -- define display objects
   -- insert objects/groups into scene view
+
+  if M.debugTouch then
+    debugTouch:create(sceneGroup,M.left, M.top, M.width, M.height)
+  end
+
   ahrs:create(sceneGroup, M.centerX, M.centerY - M.halfHeight/2, M.width, M.halfHeight)
   hsi:create(sceneGroup, M.left, M.centerY, M.width, M.halfHeight)
 
@@ -101,6 +110,10 @@ end
 --
 function scene:destroy(event)
   local sceneGroup = self.view
+
+  if M.debugTouch then
+    debugTouch:destroy()
+  end
   
 end
 

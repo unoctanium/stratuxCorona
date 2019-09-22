@@ -26,6 +26,14 @@ local function onAhrsRollPitchEvent( event )
     attitudeIndicator:update(event.roll, event.pitch)
 end
 
+local function onAhrsSpeedEvent( event )
+    airspeedTape:update(event.speed)
+end
+
+local function onAhrsAltitudeEvent( event )
+    altitudeTape:update(event.altitude)
+end
+
 --
 -- called by parent upon scene creation
 --
@@ -45,11 +53,13 @@ M.create = function (self, _displayGroup, _x, _y, _width, _height)
 
     -- Add Event Listener
     Runtime:addEventListener("ahrsRollPitch", onAhrsRollPitchEvent)
+    Runtime:addEventListener("ahrsSpeed", onAhrsSpeedEvent)
+    Runtime:addEventListener("ahrsAltitude", onAhrsAltitudeEvent)
 
     -- create displayModules from back to front
     attitudeIndicator:create(displayGroup, x, y, width, height, x, y+height/18, width*5/9, height*6/9, height*5/9) 
-    airspeedTape:create(displayGroup, x-width/2+width/9*1, y, width/9*2, height/9*7)
-    altitudeTape:create(displayGroup, x+width/2-width/9*1, y, width/9*2, height/9*7)
+    airspeedTape:create(displayGroup, x-width/2+width/9*0.75, y, width/9*1.5, height/9*7)
+    altitudeTape:create(displayGroup, x+width/2-width/9*0.75, y, width/9*1.5, height/9*7)
     slipskidIndicator:create(displayGroup, x, y+height/2-height/9*0.5, width/9*3.75, height/9*1) 
     selectedSpeedField:create(displayGroup, x-width/2+width/9*1, y-height/2+height/9*0.5, width/9*2, height/9*1)
     selectedAltitudeField:create(displayGroup, x+width/2-width/9*1, y-height/2+height/9*0.5, width/9*2, height/9*1)
@@ -65,6 +75,7 @@ end
 -- Called by parent upon destroy
 --
 M.destroy = function()
+    -- destroy modules
     hudOverlay:destroy()
     selectedMinSpeedFields:destroy()
     selectedMinAltitudeField:destroy()
@@ -74,6 +85,13 @@ M.destroy = function()
     airspeedTape:destroy()
     altitudeTape:destroy()
     attitudeIndicator:destroy()
+
+    -- destroy event listeners
+    Runtime:removeEventListener("ahrsRollPitch", onAhrsRollPitchEvent)
+    Runtime:removeEventListener("ahrsSpeed", onAhrsSpeedEvent)
+    Runtime:removeEventListener("ahrsAltitude", onAhrsAltitudeEvent)
+    
+    
 end
 
 return M
